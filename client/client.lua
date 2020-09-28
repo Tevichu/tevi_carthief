@@ -1,11 +1,4 @@
-
-
 ESX = nil
-
-
-mision = false
-
-
 
 Citizen.CreateThread(function()
   while ESX == nil do
@@ -14,6 +7,12 @@ Citizen.CreateThread(function()
     end)
   end
 end)
+
+----
+--End of ESX
+----
+
+mision = false
 
 function modelRequest(model)
  RequestModel(model)
@@ -62,67 +61,56 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-  while ESX == nil do
-    TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(0)
-    end
-        while true do
-            Citizen.Wait(0)
-            if GetDistanceBetweenCoords(vector3(1200.58, -3114.56, 4.5), GetEntityCoords(PlayerPedId(), true)) < 4 and mision == false then
-              ESX.ShowFloatingHelpNotification(msg1, vector3(1200.58, -3114.56, 4.5+2))
-              if IsControlJustPressed(1, 38) then
-                TriggerEvent('esx:showAdvancedNotification', msg2, '', msg3, 'CHAR_ARTHUR', 3)
-                TriggerEvent("spawncar")
-                CreateBlips()
-                mision = true
-              end
-            end
+  while true do
+    Citizen.Wait(0)
+      if GetDistanceBetweenCoords(vector3(1200.58, -3114.56, 4.5), GetEntityCoords(PlayerPedId(), true)) < 4 and mision == false then
+       ESX.ShowFloatingHelpNotification(msg1, vector3(1200.58, -3114.56, 4.5+2))
+         ESX.ShowHelpNotification(_U('msg1'))
+          if IsControlJustPressed(1, config.InteractKey) then
+            TriggerEvent('esx:showAdvancedNotification', _U('msg2'), '', _U('msg3'), 'CHAR_ARTHUR', 3)
+            TriggerEvent("spawncar")
+            CreateBlips()
+            mision = true
           end
-        end)
+      end
+  end
+end)
 
 
 
 Citizen.CreateThread(function()
-  while ESX == nil do
-    TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(0)
-    end
-        while true do
-            Citizen.Wait(0)
-            if mision == true then 
-              ESX.ShowHelpNotification(msg4)
-              DrawMarker(1, vector3(1189.46, -3108.26, 4.24), 0, 0, 0, 0, 0, 0, 3.5001, 3.5001, 0.6001, 0, 0, 255, 200, 0, 0, 0, 0)
-              if GetDistanceBetweenCoords(vector3(1189.46, -3108.26, 4.24), GetEntityCoords(PlayerPedId(), true)) < 4 then
-                 ESX.ShowFloatingHelpNotification(msg5, vector3(1189.46, -3108.26, 4.24+2))
-                 if IsControlJustPressed(1, 38) then
-                  local coordsauto = GetEntityCoords(Veh)
-                  if GetDistanceBetweenCoords(vector3(1189.46, -3108.26, 4.24), coordsauto, true) < 4 then
-                    ESX.Game.DeleteVehicle(Veh)
-                    mision = false
-                    TriggerServerEvent("tevi_carthief:setMoney")
-                    RemoveBlip(blip2)
-                  else
-                    ESX.ShowNotification(msg8)
-                  end
-                end
-              end
+  while true do
+    Citizen.Wait(0)
+    if mision == true then 
+      ESX.ShowHelpNotification(_U('msg4'))
+      DrawMarker(1, vector3(1189.46, -3108.26, 4.24), 0, 0, 0, 0, 0, 0, 3.5001, 3.5001, 0.6001, 0, 0, 255, 200, 0, 0, 0, 0)
+        if GetDistanceBetweenCoords(vector3(1189.46, -3108.26, 4.24), GetEntityCoords(PlayerPedId(), true)) < 4 then
+          ESX.ShowFloatingHelpNotification(_U('msg5'), vector3(1189.46, -3108.26, 4.24+2))
+          if IsControlJustPressed(1, config.InteractKey) then
+            local coordsauto = GetEntityCoords(Veh)
+            if GetDistanceBetweenCoords(vector3(1189.46, -3108.26, 4.24), coordsauto, true) < 4 then
+              ESX.Game.DeleteVehicle(Veh)
+              mision = false
+              TriggerServerEvent("tevi_carthief:setMoney")
+              RemoveBlip(blip2)
+            else
+              ESX.ShowNotification(_U('msg8'))
             end
           end
-        end)
-
-
-Citizen.CreateThread(function()
-  while ESX == nil do
-    TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(0)
-    end
-        while true do
-            Citizen.Wait(0)
-            if config.blip then
-            	CreateBlips2()
-            end
         end
-    end)
+    end
+  end
+end)
+
+
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(0)
+      if config.blip then
+        CreateBlips2()
+      end
+  end
+end)
 
 
 
@@ -149,7 +137,7 @@ CreateBlips = function()
     SetBlipColour(blip, 60)
     SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString(msg6)
+    AddTextComponentString(_U('msg6'))
     EndTextCommandSetBlipName(blip)
 
 
@@ -161,7 +149,7 @@ CreateBlips = function()
     SetBlipColour(blip2, 0)
     SetBlipAsShortRange(blip2, true)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString(msg7)
+    AddTextComponentString(_U('msg7'))
     EndTextCommandSetBlipName(blip2)
 end
 
@@ -174,7 +162,7 @@ CreateBlips2 = function()
     SetBlipColour(blip3, 4)
     SetBlipAsShortRange(blip2, true)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString(msg10)
+    AddTextComponentString(_U('msg10'))
     EndTextCommandSetBlipName(blip3)
 end
 

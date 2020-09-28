@@ -7,5 +7,5 @@ AddEventHandler('tevi_carthief:setMoney', function()
     local user = ESX.GetPlayerFromId(source)
 
     user.addAccountMoney('black_money', config.paid)
-    TriggerClientEvent('esx:showNotification', source, "" .. msg9 .. "" .. config.paid)
+    TriggerClientEvent('esx:showNotification', source, "" .. _U('msg9') .. "" .. config.paid)
 end)

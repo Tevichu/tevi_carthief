@@ -1,5 +1,9 @@
 config = {}
 
+config.Locale = 'en'
+
+config.InteractKey = 38 -- Don't forget to change the local.
+
 config.spawnponts = { -- Possible spawn points for cars
 {x=283.24,y=-239.8,z=53.61,h=69.64},
 {x=-1269.74,y=233.04,z=60.82,h=99.8},

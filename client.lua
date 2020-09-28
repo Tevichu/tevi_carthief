@@ -111,6 +111,20 @@ Citizen.CreateThread(function()
         end)
 
 
+Citizen.CreateThread(function()
+  while ESX == nil do
+    TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        Citizen.Wait(0)
+    end
+        while true do
+            Citizen.Wait(0)
+            if config.blip then
+            	CreateBlips2()
+            end
+        end
+    end)
+
+
 
 RegisterNetEvent("spawncar")
 AddEventHandler("spawncar", function()
@@ -152,7 +166,17 @@ CreateBlips = function()
 end
 
 
-
+CreateBlips2 = function()
+    blip3 = AddBlipForEntity(ped)
+    SetBlipSprite(blip3, 303)
+    SetBlipDisplay(blip3, 4)
+    SetBlipScale(blip3, 1.0)
+    SetBlipColour(blip3, 4)
+    SetBlipAsShortRange(blip2, true)
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString(msg10)
+    EndTextCommandSetBlipName(blip3)
+end
 
 
 function SpawnCar(ped,veh,seat)

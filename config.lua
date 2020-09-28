@@ -25,3 +25,7 @@ config.vehicles = {-- Possible models that can spawn
 
 --                        Min - Max
 config.paid = math.random(750, 2500) -- amount of money you earn by delivering a car
+
+
+--enable / disable the blip where the npc is located
+config.blip = false

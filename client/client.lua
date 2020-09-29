@@ -8,85 +8,102 @@ Citizen.CreateThread(function()
   end
 end)
 
-----
+--
 --End of ESX
-----
+--
 
 mision = false
+
 
 function modelRequest(model)
  RequestModel(model)
  while not HasModelLoaded(model) do
- Wait(1)
+ Wait(500)
  end
 end
 
-
-local cordenadas = {
-    {1200.58,-3114.56,4.56,"",294.1,0xE497BBEF,"s_m_y_dealer_01"},
-}
-
 Citizen.CreateThread(function()
 
-    for _,v in pairs(cordenadas) do
-      RequestModel(GetHashKey(v[7]))
-      while not HasModelLoaded(GetHashKey(v[7])) do
-        Wait(1)
-      end
+	  modelRequest(0xE497BBEF)
 
   
       RequestAnimDict("mini@strip_club@idles@bouncer@base")
       while not HasAnimDictLoaded("mini@strip_club@idles@bouncer@base") do
         Wait(1)
       end
-      ped =  CreatePed(4, v[6],v[1],v[2],v[3], 3374176, false, true)
-      SetEntityHeading(ped, v[5])
+      ped = CreatePed(4, 0xE497BBEF,1200.58,-3114.56,4.5, false, true)
+      SetEntityHeading(ped, 294.1)
       FreezeEntityPosition(ped, true)
       SetEntityInvincible(ped, true)
       SetBlockingOfNonTemporaryEvents(ped, true)
       TaskPlayAnim(ped,"mini@strip_club@idles@bouncer@base","base", 8.0, 0.0, -1, 1, 0, 0, 0, 0)
-    end
-end)
+  end)
+
+
+
+
+--
+-- Main NPC
+--
 
 Citizen.CreateThread(function()
-    while true do
-        local pos = GetEntityCoords(GetPlayerPed(-1), true)
-        Citizen.Wait(0)
-        for _,v in pairs(cordenadas) do
-            x = v[1]
-            y = v[2]
-            z = v[3]
-        end
-    end
+  while true do
+    Citizen.Wait(800)
+      if GetDistanceBetweenCoords(vector3(1200.58, -3114.56, 4.5), GetEntityCoords(PlayerPedId(), true)) < 4 then
+      	inzone1 = true
+      end
+  end
 end)
 
 Citizen.CreateThread(function()
   while true do
+    Citizen.Wait(800)
+      if GetDistanceBetweenCoords(vector3(1200.58, -3114.56, 4.5), GetEntityCoords(PlayerPedId(), true)) > 4 then
+      	inzone1 = false
+      end
+  end
+end)
+
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(10)
+		if inzone1 and mision == false then
+			ESX.ShowFloatingHelpNotification(flomsg1, vector3(1200.58, -3114.56, 4.5+2))
+		end
+	end
+end)
+
+
+
+Citizen.CreateThread(function()
+  while true do
     Citizen.Wait(0)
-      if GetDistanceBetweenCoords(vector3(1200.58, -3114.56, 4.5), GetEntityCoords(PlayerPedId(), true)) < 4 and mision == false then
-       ESX.ShowFloatingHelpNotification(msg1, vector3(1200.58, -3114.56, 4.5+2))
-         ESX.ShowHelpNotification(_U('msg1'))
-          if IsControlJustPressed(1, config.InteractKey) then
-            TriggerEvent('esx:showAdvancedNotification', _U('msg2'), '', _U('msg3'), 'CHAR_ARTHUR', 3)
-            TriggerEvent("spawncar")
-            CreateBlips()
-            mision = true
-          end
+      if inzone1 and mision == false then
+      	if IsControlJustPressed(1, Config.InteractKey) then
+      		TriggerEvent('esx:showAdvancedNotification', _U('msg2'), '', _U('msg3'), 'CHAR_ARTHUR', 3)
+      		TriggerEvent("spawncar")
+      		mision = true
+      	end
       end
   end
 end)
 
 
 
+--
+-- End Main NPC
+--
+
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(0)
+    Citizen.Wait(5)
     if mision == true then 
       ESX.ShowHelpNotification(_U('msg4'))
       DrawMarker(1, vector3(1189.46, -3108.26, 4.24), 0, 0, 0, 0, 0, 0, 3.5001, 3.5001, 0.6001, 0, 0, 255, 200, 0, 0, 0, 0)
         if GetDistanceBetweenCoords(vector3(1189.46, -3108.26, 4.24), GetEntityCoords(PlayerPedId(), true)) < 4 then
-          ESX.ShowFloatingHelpNotification(_U('msg5'), vector3(1189.46, -3108.26, 4.24+2))
-          if IsControlJustPressed(1, config.InteractKey) then
+          ESX.ShowFloatingHelpNotification(flomsg2, vector3(1189.46, -3108.26, 4.24+2))
+          if IsControlJustPressed(1, Config.InteractKey) then
             local coordsauto = GetEntityCoords(Veh)
             if GetDistanceBetweenCoords(vector3(1189.46, -3108.26, 4.24), coordsauto, true) < 4 then
               ESX.Game.DeleteVehicle(Veh)
@@ -103,28 +120,23 @@ Citizen.CreateThread(function()
 end)
 
 
-Citizen.CreateThread(function()
-  while true do
-    Citizen.Wait(0)
-      if config.blip then
-        CreateBlips2()
-      end
-  end
-end)
-
-
 
 RegisterNetEvent("spawncar")
 AddEventHandler("spawncar", function()
-  pos = config.spawnponts[math.random(1, #config.spawnponts)]
-  modelo = config.vehicles[math.random(1, #config.vehicles)]
+  pos = Config.spawnpoints[math.random(1, #Config.spawnpoints)]
+  modelo = Config.vehicles[math.random(1, #Config.vehicles)]
+  modelo2 = GetHashKey(modelo.m)
   print(modelo.m)
   modelRequest(0x54DBEE1F)
+  modelRequest(modelo2)
   pedenauto = CreatePed(4, 0x54DBEE1F,pos.x,pos.y,pos.z,pos.h, true, true)
   coordspedenauto = GetEntityCoords(pedenauto)
-  Veh = CreateVehicle(modelo.m,pos.x,pos.y,pos.z,pos.h, true, true)
+  Veh = CreateVehicle(modelo2,pos.x,pos.y,pos.z,pos.h, true, true)
+  SpawnCar(pedenauto,Veh,-1)
   TaskWarpPedIntoVehicle(pedenauto, Veh, -1)
   TaskVehicleDriveWander(pedenauto,Veh,20.0,786603)
+  print(coordspedenauto)
+  CreateBlips()
 end)
 
 
@@ -176,3 +188,14 @@ SetPedCombatAttributes(ped, 2,1)
 SetPedCombatAttributes(ped, 3,1)
 end
 
+AddEventHandler('onResourceStart', function()
+  mision = true
+  Wait(5000)
+  flomsg1 = _U('msg1')
+  flomsg2 = _U('msg5')
+  print("Script Loaded")
+  mision = false
+  if Config.blip then
+  	CreateBlips2()
+  end
+end)

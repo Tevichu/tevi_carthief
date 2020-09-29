@@ -1,10 +1,10 @@
-config = {}
+Config = {}
 
-config.Locale = 'en'
+Config.Locale = 'en'
 
-config.InteractKey = 38 -- Don't forget to change the local.
+Config.InteractKey = 38 -- Don't forget to change the local.
 
-config.spawnponts = { -- Possible spawn points for cars
+Config.spawnpoints = { -- Possible spawn points for cars
 {x=283.24,y=-239.8,z=53.61,h=69.64},
 {x=-1269.74,y=233.04,z=60.82,h=99.8},
 {x=-1183.65,y=-1268.58,z=5.84,h=26.37},
@@ -12,7 +12,7 @@ config.spawnponts = { -- Possible spawn points for cars
 {x=-3003.39,y=1456.03,z=26.83,h=331.48}
 }
 
-config.vehicles = {-- Possible models that can spawn
+Config.vehicles = {-- Possible models that can spawn
 {m="cogcabrio"},
 {m="oracle2"},
 {m="zion"},
@@ -28,8 +28,8 @@ config.vehicles = {-- Possible models that can spawn
 }
 
 --                        Min - Max
-config.paid = math.random(750, 2500) -- amount of money you earn by delivering a car
+Config.paid = math.random(750, 2500) -- amount of money you earn by delivering a car
 
 
 --enable / disable the blip where the npc is located
-config.blip = false
+Config.blip = true
